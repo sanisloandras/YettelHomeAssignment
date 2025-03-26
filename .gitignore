@@ -1,0 +1,61 @@
+# Gradle
+.gradle/
+build/
+captures/
+*.iml
+
+# Local configuration (specific to your machine)
+local.properties
+/.idea/
+.DS_Store
+
+# Android Studio / IntelliJ
+*.log
+*.hprof
+*.swp
+*.swo
+*.swn
+
+# Kotlin / Java
+*.class
+*.kotlin_module
+*.jar
+*.war
+*.ear
+
+# Dependency caches
+**/.cxx/**
+**/.externalNativeBuild/**
+**/.gradle/**
+**/build/
+**/out/
+**/bin/
+
+# Keystore files (avoid committing secret keys)
+*.jks
+*.keystore
+
+# Firebase / Google Services (if using Firebase)
+google-services.json
+app/google-services.json
+
+# Proguard and Lint reports
+proguard-rules.pro
+lint/intermediates/
+lint/generated/
+
+# Android NDK
+**/obj/
+**/libs/
+
+# Virtual machine crash logs
+hs_err_pid*
+
+# Jetpack Compose Compiler Cache
+**/.compose-cache/
+
+# Fastlane (for automation)
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+fastlane/test_output/
