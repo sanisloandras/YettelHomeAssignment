@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">YettelHomeAssignment</string>
+    <string name="header_title">E-matrica</string>
+    <string name="back_content_description">Back</string>
+    <string name="purchase">Vásárlás</string>
+    <string name="proceed">Tovább</string>
+    <string name="cancel">Mégsem</string>
+    <string name="ok">Rendben</string>
+    <string name="amount_to_pay">Fizetendő összeg</string>
+    <string name="country_vignettes">Országos matricák</string>
+    <string name="yearly_country_vignettes">Éves vármegyei matricák</string>
+    <string name="confirm_order">Vásárlás megerősítése</string>
+    <string name="plate_number">Rendszám</string>
+    <string name="vignette_type">Matrica típusa</string>
+    <string name="trx_fee">Rendszerhasználati díj</string>
+    <string name="successful_order">A matricákat sikeresen kifizetted!</string>
 </resources>
