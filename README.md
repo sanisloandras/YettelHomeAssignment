@@ -2,7 +2,9 @@ Rövid videó bemutató:
 https://drive.google.com/file/d/1dxTF4g7xnNlFssb5py5U57gAOMVQPr53/view?usp=sharing
 
 Telepítési dokumentáció:
-"development" branch kiválasztása után Android Studio Meerkat-al telepíthető az alkalmazás.
+Előfeltétel: Android Studio Meerkat
+- válaszd ki a "development" branch-et,
+- győződj meg, hogy a HighwayApi.BASE_URL értéke a környezetednek megfelelő
 
 Javaslatok (bónusz feladat):
 API:
@@ -11,6 +13,7 @@ API:
 összevonható
 2) nem teljesen értem, hogy az éver vármegye matricák id-ja miért YEAR_11, YEAR_12, stb, ez elég furcsa
 3) Az "order" végpontnak "cost" paramétert adtam át(nem a "sum"-ot), remélem ez helyes, de ez így kicsit félrevezető.
+4) Az "order" végpont visszatéríti a megvásárolt matricákat, de a mobil UI ezt nem használja
 
 UI: 
 1) A Figma tervek és az API alapján arra a következtetésre jutottam, hogy különböző vármegyékben a matrica ára eltérhet. A kódot is ennek megfelelően írtam. Viszont más webes felületeken azt tapasztaltam, hogy egységes a vármegye matricák ára is, ezen lehetne egyszerűsíteni. 
