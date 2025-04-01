@@ -31,5 +31,6 @@ https://github.com/wuerdo/geoHungary
 - a process death-et egyenlőre nem kezeli teljes mértékben az alkalmazás
 
 Megjegyzések:
-- egyéb 3rd party libek amiket nem használtam, hogy minimalista maradjon a kód: https://arrow-kt.io/
+- egyéb 3rd party libek amiket nem használtam, hogy minimalista maradjon a kód:
+https://arrow-kt.io/
 https://github.com/MobileNativeFoundation/Store
