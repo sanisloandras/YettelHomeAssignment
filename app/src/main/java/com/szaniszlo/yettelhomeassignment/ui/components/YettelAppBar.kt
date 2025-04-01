@@ -1,4 +1,4 @@
-package com.szaniszlo.yettelhomeassignment.ui.core
+package com.szaniszlo.yettelhomeassignment.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

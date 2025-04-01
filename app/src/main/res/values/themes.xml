@@ -3,4 +3,9 @@
     <style name="Base.Theme.YettelHomeAssignment" parent="Theme.Material3.DayNight.NoActionBar" />
 
     <style name="Theme.YettelHomeAssignment" parent="Base.Theme.YettelHomeAssignment" />
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#B4FF00</item>
+        <item name="postSplashScreenTheme">@style/Base.Theme.YettelHomeAssignment</item>
+    </style>
 </resources>
