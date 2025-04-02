@@ -55,14 +55,14 @@ import java.util.Locale
 fun MainVignettePurchaseScreen(
     viewModel: MainVignettePurchaseViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
-    onPurchaseClicked: () -> Unit,
+    onPurchaseClicked: (String) -> Unit,
     onCountyVignettesClicked: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.navigateToPurchaseConfirmationEvent.collect {
-            onPurchaseClicked()
+        viewModel.navigateToPurchaseConfirmationEvent.collect { vignetteSelection ->
+            onPurchaseClicked(vignetteSelection)
         }
     }
 

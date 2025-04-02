@@ -52,15 +52,15 @@ import java.util.Locale
 fun CountyVignettePurchaseScreen(
     viewModel: CountyVignettePurchaseViewModel = hiltViewModel(),
     onBack: () -> Unit,
-    onContinue: () -> Unit,
+    onContinue: (String) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {
-        viewModel.navigateToConfirmOrder.collectLatest {
-            onContinue()
+        viewModel.navigateToConfirmOrder.collectLatest { vignetteSelection ->
+            onContinue(vignetteSelection)
         }
     }
 
