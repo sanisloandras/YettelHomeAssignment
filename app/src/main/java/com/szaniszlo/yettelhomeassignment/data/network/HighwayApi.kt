@@ -23,6 +23,6 @@ internal interface HighwayApi {
 
     companion object {
         // subject to change
-        const val BASE_URL = "http://192.168.0.71:8080/v1/"
+        const val BASE_URL = "http://192.168.0.65:8080/v1/"
     }
 }

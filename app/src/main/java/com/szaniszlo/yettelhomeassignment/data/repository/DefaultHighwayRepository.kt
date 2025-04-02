@@ -11,6 +11,7 @@ import com.szaniszlo.yettelhomeassignment.domain.model.highwayinfo.HighwayInfo
 import com.szaniszlo.yettelhomeassignment.domain.model.vehicle.Vehicle
 import com.szaniszlo.yettelhomeassignment.domain.repository.CountyRepository
 import com.szaniszlo.yettelhomeassignment.domain.repository.HighwayRepository
+import kotlinx.coroutines.delay
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -26,10 +27,10 @@ internal class DefaultHighwayRepository @Inject constructor(
     // basic in-memory cache, could be abstracted as a data source
     private var cachedVehicle: Vehicle? = null
 
-    private var vignetteSelection = emptySet<VignetteType>()
-
     override suspend fun getHighwayInfo(): HighwayInfo {
         cachedHighwayInfo?.let { return it }
+        // fake delay
+        delay(1_000)
         return requireNotNull(highwayApi.info().body())
             .also { highwayInfoDto ->
                 saveCounties(highwayInfoDto)
@@ -51,16 +52,12 @@ internal class DefaultHighwayRepository @Inject constructor(
 
     override suspend fun getVehicle(): Vehicle {
         cachedVehicle?.let { return it }
+        // fake delay
+        delay(1_000)
         return requireNotNull(highwayApi.vehicle().body()).asDomain().also { cachedVehicle = it }
     }
 
-    override fun saveVignetteSelection(vignetteSelection: Set<VignetteType>) {
-        this.vignetteSelection = vignetteSelection
-    }
-
-    override fun getVignetteSelection() = vignetteSelection
-
-    override suspend fun confirmOrder() {
+    override suspend fun confirmOrder(vignetteSelection: Set<VignetteType>) {
         val category = getVehicle().vignetteCategory.category
         val highwayInfo = getHighwayInfo()
         val orders = HighwayOrdersDto(

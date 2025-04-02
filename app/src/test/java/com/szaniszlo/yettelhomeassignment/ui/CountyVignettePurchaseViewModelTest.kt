@@ -7,7 +7,6 @@ import com.szaniszlo.yettelhomeassignment.MainDispatcherExtension
 import com.szaniszlo.yettelhomeassignment.domain.model.VignetteType
 import com.szaniszlo.yettelhomeassignment.domain.model.county.County
 import com.szaniszlo.yettelhomeassignment.domain.usecase.GetCountiesWithCostUseCase
-import com.szaniszlo.yettelhomeassignment.domain.usecase.StoreVignetteSelectionUseCase
 import com.szaniszlo.yettelhomeassignment.ui.countyvignettes.CountyVignettePurchaseUiState
 import com.szaniszlo.yettelhomeassignment.ui.countyvignettes.CountyVignettePurchaseViewModel
 import com.szaniszlo.yettelhomeassignment.ui.countyvignettes.SelectableCounty
@@ -28,9 +27,6 @@ class CountyVignettePurchaseViewModelTest {
 
     @MockK
     private lateinit var mockGetCountiesWithCostUseCase: GetCountiesWithCostUseCase
-
-    @MockK(relaxUnitFun = true)
-    private lateinit var mockStoreVignetteSelectionUseCase: StoreVignetteSelectionUseCase
 
     @BeforeEach
     fun beforeEach() {
@@ -148,23 +144,13 @@ class CountyVignettePurchaseViewModelTest {
                 viewModel.next()
 
                 // then
-                assertThat(awaitItem()).isEqualTo(Unit)
-            }
-
-            coVerify {
-                mockStoreVignetteSelectionUseCase(
-                    setOf(
-                        VignetteType.YEAR_27,
-                        VignetteType.YEAR_29
-                    )
-                )
+                assertThat(awaitItem()).isEqualTo("YEAR_27,YEAR_29")
             }
         }
 
     private fun createSut() = CountyVignettePurchaseViewModel(
         savedStateHandle = savedStateHandle,
         getCountiesUseCase = mockGetCountiesWithCostUseCase,
-        storeVignetteSelectionUseCase = mockStoreVignetteSelectionUseCase,
     )
 
     companion object {
