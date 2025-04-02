@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.szaniszlo.yettelhomeassignment.domain.model.VignetteType
 import com.szaniszlo.yettelhomeassignment.domain.usecase.GetCountiesWithCostUseCase
-import com.szaniszlo.yettelhomeassignment.domain.usecase.StoreVignetteSelectionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -19,7 +18,6 @@ import javax.inject.Inject
 class CountyVignettePurchaseViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     getCountiesUseCase: GetCountiesWithCostUseCase,
-    private val storeVignetteSelectionUseCase: StoreVignetteSelectionUseCase,
 ) : ViewModel() {
 
     private val selection =
@@ -47,7 +45,7 @@ class CountyVignettePurchaseViewModel @Inject constructor(
     private val _noCountySelectedEvent = MutableSharedFlow<Unit>()
     val noCountySelectedEvent = _noCountySelectedEvent.asSharedFlow()
 
-    private val _navigateToConfirmOrder = MutableSharedFlow<Unit>()
+    private val _navigateToConfirmOrder = MutableSharedFlow<String>()
     val navigateToConfirmOrder = _navigateToConfirmOrder.asSharedFlow()
 
     fun onCountyCheckChanged(countyId: String) {
@@ -68,11 +66,8 @@ class CountyVignettePurchaseViewModel @Inject constructor(
             when {
                 selectedCountyIds.isEmpty() -> _noCountySelectedEvent.emit(Unit)
                 else -> {
-                    val vignetteTypes = selectedCountyIds
-                        .map { VignetteType.valueOf(it) }
-                        .toSet()
-                    storeVignetteSelectionUseCase(vignetteTypes)
-                    _navigateToConfirmOrder.emit(Unit)
+                    val vignetteTypes = selectedCountyIds.joinToString(",")
+                    _navigateToConfirmOrder.emit(vignetteTypes)
                 }
             }
         }

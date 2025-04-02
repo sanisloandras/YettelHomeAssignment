@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.szaniszlo.yettelhomeassignment.domain.model.VignetteType
 import com.szaniszlo.yettelhomeassignment.domain.usecase.GetHighwayInfoUseCase
 import com.szaniszlo.yettelhomeassignment.domain.usecase.GetVehicleUseCase
-import com.szaniszlo.yettelhomeassignment.domain.usecase.StoreVignetteSelectionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -23,14 +22,13 @@ import javax.inject.Inject
 class MainVignettePurchaseViewModel @Inject constructor(
     private val getHighwayInfoUseCase: GetHighwayInfoUseCase,
     private val getVehicleUseCase: GetVehicleUseCase,
-    private val storeVignetteSelectionUseCase: StoreVignetteSelectionUseCase,
 ) : ViewModel() {
 
     private val _uiState =
         MutableStateFlow<MainVignettePurchaseUiState>(MainVignettePurchaseUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
-    private val _navigateToPurchaseConfirmationEvent = MutableSharedFlow<Unit>()
+    private val _navigateToPurchaseConfirmationEvent = MutableSharedFlow<String>()
     val navigateToPurchaseConfirmationEvent = _navigateToPurchaseConfirmationEvent.asSharedFlow()
 
     init {
@@ -91,8 +89,8 @@ class MainVignettePurchaseViewModel @Inject constructor(
                 _uiState.value as? MainVignettePurchaseUiState.Default ?: return@launch
             val vignetteSelection = state.countryVignettes
                 .first { it.isSelected }
-            storeVignetteSelectionUseCase(setOf(vignetteSelection.vignetteType))
-            _navigateToPurchaseConfirmationEvent.emit(Unit)
+                .vignetteType.name
+            _navigateToPurchaseConfirmationEvent.emit(vignetteSelection)
         }
     }
 

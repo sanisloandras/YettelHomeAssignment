@@ -17,6 +17,5 @@ class MainVignettePurchaseViewModelTest {
     private fun createSut() = MainVignettePurchaseViewModel(
         getHighwayInfoUseCase = mockGetHighwayInfoUseCase,
         getVehicleUseCase = mockk(),
-        storeVignetteSelectionUseCase = mockk()
     )
 }
