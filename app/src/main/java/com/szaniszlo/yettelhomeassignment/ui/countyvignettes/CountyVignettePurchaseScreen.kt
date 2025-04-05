@@ -27,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -41,6 +42,7 @@ import com.szaniszlo.yettelhomeassignment.domain.model.county.County
 import com.szaniszlo.yettelhomeassignment.ui.components.FullScreenLoader
 import com.szaniszlo.yettelhomeassignment.ui.components.TotalCostComponent
 import com.szaniszlo.yettelhomeassignment.ui.components.YettelAppBar
+import com.szaniszlo.yettelhomeassignment.ui.components.map.CountryMapWrapper
 import com.szaniszlo.yettelhomeassignment.ui.core.theme.Typography
 import com.szaniszlo.yettelhomeassignment.ui.core.theme.yettelBlue
 import com.szaniszlo.yettelhomeassignment.ui.core.theme.yettelGreen
@@ -82,6 +84,7 @@ fun CountyVignettePurchaseScreen(
         onBackClick = onBack,
         onNextClick = viewModel::next,
         onCountyCheckChanged = viewModel::onCountyCheckChanged,
+        onCountyCheckChangedByName = viewModel::onCountyCheckChangedByName
     )
 }
 
@@ -91,10 +94,12 @@ private fun CountyVignettePurchaseScreenContent(
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
     onCountyCheckChanged: (String) -> Unit,
+    onCountyCheckChangedByName: (String) -> Unit,
     snackbarHostState: SnackbarHostState,
 ) {
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
+        containerColor = Color.White,
         topBar = {
             YettelAppBar(
                 onBackClicked = onBackClick,
@@ -110,7 +115,8 @@ private fun CountyVignettePurchaseScreenContent(
                 is CountyVignettePurchaseUiState.Default -> DefaultContent(
                     uiState = uiState,
                     onCountyCheckChanged = onCountyCheckChanged,
-                    onContinueClick = onNextClick
+                    onCountyCheckChangedByName = onCountyCheckChangedByName,
+                    onContinueClick = onNextClick,
                 )
 
                 CountyVignettePurchaseUiState.Loading -> FullScreenLoader()
@@ -123,20 +129,26 @@ private fun CountyVignettePurchaseScreenContent(
 private fun DefaultContent(
     uiState: CountyVignettePurchaseUiState.Default,
     onCountyCheckChanged: (String) -> Unit,
-    onContinueClick: () -> Unit
+    onCountyCheckChangedByName: (String) -> Unit,
+    onContinueClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .verticalScroll(rememberScrollState())
             .padding(all = 16.dp)
     ) {
         YearlyCountyVignettesLabel()
 
-        Text(text = "TODO: CountryView")
-
+        CountryMapWrapper(
+            geoJson = uiState.geoJson,
+            selectedCounties = uiState.selectedCountyNames,
+            onClickCounty = onCountyCheckChangedByName,
+        )
+//
         Spacer(modifier = Modifier.height(16.dp))
 
-        // could be a lazy list, but for not it's fine
+//        // could be a lazy list, but for not it's fine
         uiState.counties.forEach { county ->
             CountyItem(
                 selectableCounty = county,
@@ -233,6 +245,7 @@ private fun CountyVignettePurchaseScreenContentPreview(
         onBackClick = {},
         onNextClick = {},
         onCountyCheckChanged = {},
+        onCountyCheckChangedByName = {},
         snackbarHostState = SnackbarHostState(),
     )
 }
@@ -242,6 +255,7 @@ private class CountyVignettePurchaseUiStatePreviewProvider :
 
     override val values = sequenceOf(
         CountyVignettePurchaseUiState.Default(
+            geoJson = null,
             counties = listOf(
                 SelectableCounty(
                     isSelected = false,
@@ -276,6 +290,7 @@ private class CountyVignettePurchaseUiStatePreviewProvider :
             ),
             totalCost = 5570f,
             isDirectConnectionPresent = false,
+            selectedCountyNames = emptySet<String>(),
         )
     )
 }
