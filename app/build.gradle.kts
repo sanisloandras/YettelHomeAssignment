@@ -7,6 +7,7 @@ plugins {
     kotlin("plugin.serialization") version "2.0.21"
     alias(libs.plugins.navigation.safeargs)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
 }
 
 android {
@@ -43,7 +44,20 @@ android {
     buildFeatures {
         buildConfig = true
         compose = true
+        viewBinding = true
     }
+    secrets {
+        // To add your Maps API key to this project:
+        // 1. If the secrets.properties file does not exist, create it in the same folder as the local.properties file.
+        // 2. Add this line, where YOUR_API_KEY is your API key:
+        //        MAPS_API_KEY=YOUR_API_KEY
+        propertiesFileName = "secrets.properties"
+
+        // A properties file containing default secret values. This file can be
+        // checked in version control.
+        defaultPropertiesFileName = "local.defaults.properties"
+    }
+
 }
 
 dependencies {
@@ -70,8 +84,15 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
+    // Maps
+    implementation(libs.play.services.maps)
+    implementation(libs.maps.compose)
+    implementation(libs.android.maps.utils)
+
     // DI
     implementation(libs.hilt.android)
+    implementation(libs.play.services.maps)
+    implementation(libs.androidx.constraintlayout)
     debugImplementation(libs.ui.tooling)
     kapt(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
@@ -85,10 +106,6 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui)
     implementation(libs.androidx.navigation.compose)
-
-    // Jetpack DataStore
-    implementation(libs.androidx.datastore.preferences)
-    implementation(libs.androidx.datastore)
 
     // Testing
     testImplementation(libs.junit)
