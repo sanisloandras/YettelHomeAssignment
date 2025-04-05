@@ -4,13 +4,13 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.szaniszlo.yettelhomeassignment.MainDispatcherExtension
-import com.szaniszlo.yettelhomeassignment.domain.model.VignetteType
 import com.szaniszlo.yettelhomeassignment.domain.model.county.County
 import com.szaniszlo.yettelhomeassignment.domain.usecase.GetCountiesWithCostUseCase
+import com.szaniszlo.yettelhomeassignment.domain.usecase.GetCountryGeoJsonUseCase
 import com.szaniszlo.yettelhomeassignment.ui.countyvignettes.CountyVignettePurchaseUiState
 import com.szaniszlo.yettelhomeassignment.ui.countyvignettes.CountyVignettePurchaseViewModel
 import com.szaniszlo.yettelhomeassignment.ui.countyvignettes.SelectableCounty
-import io.mockk.coVerify
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
@@ -28,11 +28,18 @@ class CountyVignettePurchaseViewModelTest {
     @MockK
     private lateinit var mockGetCountiesWithCostUseCase: GetCountiesWithCostUseCase
 
+    @MockK
+    private lateinit var mockGetCountryGeoJsonUseCase: GetCountryGeoJsonUseCase
+
     @BeforeEach
     fun beforeEach() {
         every {
             mockGetCountiesWithCostUseCase()
         } returns flowOf(COUNTIES)
+
+        coEvery {
+            mockGetCountryGeoJsonUseCase()
+        } returns null
     }
 
     @Test
@@ -48,6 +55,8 @@ class CountyVignettePurchaseViewModelTest {
                     counties = SELECTABLE_COUNTIES,
                     totalCost = 0f,
                     isDirectConnectionPresent = true,
+                    geoJson = null,
+                    selectedCountyNames = emptySet(),
                 )
             )
         }
@@ -151,6 +160,7 @@ class CountyVignettePurchaseViewModelTest {
     private fun createSut() = CountyVignettePurchaseViewModel(
         savedStateHandle = savedStateHandle,
         getCountiesUseCase = mockGetCountiesWithCostUseCase,
+        getCountryGeoJsonUseCase = mockGetCountryGeoJsonUseCase,
     )
 
     companion object {
