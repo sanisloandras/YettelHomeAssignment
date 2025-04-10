@@ -5,6 +5,7 @@ Telepítési dokumentáció:
 Előfeltétel: Android Studio Meerkat
 - válaszd ki a "development" branch-et,
 - győződj meg, hogy a HighwayApi.BASE_URL értéke a környezetednek megfelelő
+- A térkép működéséhez létrehozni egy secrets.properties nevő file-t, aminek tartalma: MAPS_API_KEY=API_KULCS
 
 Javaslatok (bónusz feladat):
 API:
@@ -25,10 +26,11 @@ Itt többes számban - megjelenítésre kerülnek. Ennek megfelelően a  "highwa
 Továbbá, ez azt is jelenti, vagy jelentheti, hogy matrica vásárlás előtt a felhasználónak autót is kell választania?. Különböző gépjármű típusokhoz különböző típusú matricák különböző összegért vásárolhatóak. Ezeket az esetek nincsenek lefedve sem a figmában, sem az api válaszokban. Ez azért lenne, mert "egyszerűsített" autópálya matrica vásárlást kell lefejleszteni?
 
 Amire nem maradt időm:
-- térképes nézet. Valamiért csak .png formátúmban sikerült exportálnom a képes resourcokat (például a "sikeres rendelés" képernyőn a képeket). Valamennyit kutattam, és legtöbbször a geoJSON jött elő mint megoldási javaslat.
-https://github.com/wuerdo/geoHungary
 - teljes test lefedettség
-- a process death-et egyenlőre nem kezeli teljes mértékben az alkalmazás
+
+Ami a határidő után készült el:
+- térképes nézet (nem a mellékelt .svg file-ok segítségével lett megvalósítva, és vannak performancia issuek)
+- process death kezelése
 
 Megjegyzések:
 - egyéb 3rd party libek amiket nem használtam, hogy minimalista maradjon a kód:

@@ -3,13 +3,16 @@ package com.szaniszlo.yettelhomeassignment.ui.countyvignettes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.szaniszlo.yettelhomeassignment.domain.model.VignetteType
 import com.szaniszlo.yettelhomeassignment.domain.usecase.GetCountiesWithCostUseCase
+import com.szaniszlo.yettelhomeassignment.domain.usecase.GetCountryGeoJsonUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,15 +21,17 @@ import javax.inject.Inject
 class CountyVignettePurchaseViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     getCountiesUseCase: GetCountiesWithCostUseCase,
+    getCountryGeoJsonUseCase: GetCountryGeoJsonUseCase,
 ) : ViewModel() {
 
     private val selection =
-        savedStateHandle.getStateFlow(KEY_SELECTED_COUNTY_IDS,emptyList<String>())
+        savedStateHandle.getStateFlow(KEY_SELECTED_COUNTY_IDS, emptyList<String>())
 
     val uiState = combine(
         getCountiesUseCase(),
-        selection
-    ) { counties,selection ->
+        selection,
+        flow { emit(getCountryGeoJsonUseCase()) },
+    ) { counties, selection, geoJson ->
         val selectableCounties = counties.map { county ->
             SelectableCounty(
                 county = county,
@@ -34,11 +39,15 @@ class CountyVignettePurchaseViewModel @Inject constructor(
             )
         }
         CountyVignettePurchaseUiState.Default(
+            geoJson = geoJson,
+            selectedCountyNames = counties.filter {
+                selection.contains(it.id)
+            }.map { it.name }.toSet(),
             counties = selectableCounties,
             totalCost = selectableCounties
                 .filter { it.isSelected }
-                .fold(0f) { acc,county -> acc + county.county.cost },
-            isDirectConnectionPresent = isDirectConnectionPresent(selectableCounties)
+                .fold(0f) { acc, county -> acc + county.county.cost },
+            isDirectConnectionPresent = isDirectConnectionPresent(selectableCounties),
         )
     }.stateIn(viewModelScope,SharingStarted.WhileSubscribed(),CountyVignettePurchaseUiState.Loading)
 
@@ -56,6 +65,25 @@ class CountyVignettePurchaseViewModel @Inject constructor(
         } else {
             selectedCountyIds.plus(countyId)
         }
+        savedStateHandle[KEY_SELECTED_COUNTY_IDS] = updatedSelectedCountyIds
+    }
+
+    fun onCountyCheckChangedByName(countyName: String) {
+        val defaultState = (uiState.value as? CountyVignettePurchaseUiState.Default) ?: return
+
+        val selectedCountyIds =
+            savedStateHandle.get<List<String>>(KEY_SELECTED_COUNTY_IDS) ?: emptyList()
+
+        val countyId = defaultState.counties.first {
+            it.county.name == countyName
+        }.id
+
+        val updatedSelectedCountyIds = if (selectedCountyIds.contains(countyId)) {
+            selectedCountyIds.minus(countyId)
+        } else {
+            selectedCountyIds.plus(countyId)
+        }
+
         savedStateHandle[KEY_SELECTED_COUNTY_IDS] = updatedSelectedCountyIds
     }
 
@@ -125,13 +153,12 @@ class CountyVignettePurchaseViewModel @Inject constructor(
             "Jász-Nagykun-Szolnok" to setOf(
                 "Csongrád",
                 "Bács-Kiskun",
-                "Pest",
                 "Heves",
                 "Hajdú-Bihar",
                 "Békés"
             ),
-            "Komárom-Esztergom" to setOf("Győr-Moson-Sopron","Veszprém","Fejér","Pest"),
-            "Nógrád" to setOf("Pest","Heves","Borsod-Abaúj-Zemplén"),
+            "Komárom-Esztergom" to setOf("Győr-Moson-Sopron", "Veszprém", "Fejér", "Pest"),
+            "Nógrád" to setOf("Pest", "Heves", "Borsod-Abaúj-Zemplén"),
             "Pest" to setOf(
                 "Komárom-Esztergom",
                 "Fejér",
