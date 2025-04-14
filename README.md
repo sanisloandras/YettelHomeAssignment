@@ -5,6 +5,8 @@ Telepítési dokumentáció:
 Előfeltétel: Android Studio Meerkat
 - válaszd ki a "development" branch-et,
 - győződj meg, hogy a HighwayApi.BASE_URL értéke a környezetednek megfelelő
+- A térkép működéséhez létrehozni egy secrets.properties nevő file-t, aminek tartalma: MAPS_API_KEY=API_KULCS
+- A térkép-es nézet testeléséhez ajánlott a proguard használata, ellenkező esetben performancia issue-k tapasztalhatóak deubg mode-ban
 
 Javaslatok (bónusz feladat):
 API:
@@ -24,11 +26,12 @@ Itt többes számban - megjelenítésre kerülnek. Ennek megfelelően a  "highwa
 "vehicleCategories": [ { "category": "CAR", "vignetteCategory": "D1", "name": { "hu": "Személygépjármű", "en": "Car" } } ],  Viszont ez a figma terveken sajnos nincs bemutatva, ott mindig csak 1 gépjármű információja van megjelenítve.
 Továbbá, ez azt is jelenti, vagy jelentheti, hogy matrica vásárlás előtt a felhasználónak autót is kell választania?. Különböző gépjármű típusokhoz különböző típusú matricák különböző összegért vásárolhatóak. Ezeket az esetek nincsenek lefedve sem a figmában, sem az api válaszokban. Ez azért lenne, mert "egyszerűsített" autópálya matrica vásárlást kell lefejleszteni?
 
+Ami a határidő után készült el:
+- térképes nézet (nem a mellékelt .svg file-ok segítségével lett megvalósítva)
+- process death kezelése
+
 Amire nem maradt időm:
-- térképes nézet. Valamiért csak .png formátúmban sikerült exportálnom a képes resourcokat (például a "sikeres rendelés" képernyőn a képeket). Valamennyit kutattam, és legtöbbször a geoJSON jött elő mint megoldási javaslat.
-https://github.com/wuerdo/geoHungary
 - teljes test lefedettség
-- a process death-et egyenlőre nem kezeli teljes mértékben az alkalmazás
 
 Megjegyzések:
 - egyéb 3rd party libek amiket nem használtam, hogy minimalista maradjon a kód:
